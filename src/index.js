@@ -11,28 +11,31 @@ const submitHandler = (event) => {
   errorDiv.classList.add("error");
   errorDiv.id = "searchError";
   errorDiv.innerText = "Please enter a search term";
-  errorDiv.style.display = "none";
-  theForm.appendChild(errorDiv);
+  errorDiv.style.display = "block";
 
   const errors = validateForm(formData);
+ 
+  if (!document.querySelector(".error")) {
+    theForm.appendChild(errorDiv);
+  };
 
-  const errorElements = document.querySelectorAll(".error");
-  for (let element of errorElements) {
-    element.style.display = "none";
-  }
+  const err = document.querySelector(".error");
 
-  if (document.getElementById("searchTerm").value == "") {
-    const errorElement = document.querySelector(`.error`);
-    errorElement.innerHTML = errors.message;
-    errorElement.style.display = "block";
+  const searchTerm = document.getElementById("searchTerm").value;
+  if (!searchTerm.replace(/\s/g, "")) {
+    err.style.display = "block";
+  } 
+  else if (document.querySelector(".error") && searchTerm.replace(/\s/g, "")) {
+    err.style.display = "none";
   }
 
   if (!Object.keys(errors).length) {
     // write code to perform search
-    const articles = document.querySelectorAll("h2");
+    const articles = document.querySelectorAll("article");
+    const headers = document.querySelectorAll("h2");
     for (let i = 0; i < articles.length; i++) {
       articles[i].classList.add("hidden");
-      if (articles[i].innerHTML.includes(formData.get("searchTerm"))) {
+      if (headers[i].innerHTML.includes(formData.get("searchTerm"))) {
         articles[i].classList.remove("hidden");
       }
     }
